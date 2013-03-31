@@ -23,8 +23,12 @@ function fatal {
 CUR=/o/odeskdev-pysvr/current
 ETC=$CUR/etc
 TMP=/var/tmp/pysvr
+RUN=/var/run/pysvr
 
 nginx -c $ETC/pysvr_nginx.conf 2> $TMP/nginx_error.log || fatal nginx failed to start
 uwsgi --ini $ETC/pysvr_uwsgi.ini || fatal uwsgi failed to start
 
+
+pgrep -F $RUN/nginx.pid nginx &>/dev/null || fatal nginx not running
+pgrep -F $RUN/uwsgi.pid uwsgi &>/dev/null || fatal uwsgi not running
 echo OK
