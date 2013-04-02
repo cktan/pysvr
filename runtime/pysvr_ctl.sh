@@ -5,18 +5,16 @@ TMP=/var/tmp/pysvr
 RUN=/var/run/pysvr
 LOG=/var/log/pysvr
 
-function fatal {
-    echo '[FATAL]' $@
-    exit 1
-}
+function fatal { echo '[FATAL]' $@; exit 1;}
+
+function warning { echo '[WARNING]' $@; }
 
 
 [ $UID != 0 ] || fatal cannot run as root user
-#[ -r $F ] || fatal cannot read $F
-#. $F
+[ -r $F ] && source $F || warning cannot read $F
 
 function start {
-    [ -d $CUR ] || fatal missing dir $CUR
+    [ -d $CUR ] || fatal missing dir $CUR - this is usually a symlink to the runtime dir.
     [ -d $ETC ] || fatal missing dir $ETC
     for i in $TMP $RUN $LOG; do 
 	[ -d $i ] || fatal missing dir $i
@@ -41,8 +39,8 @@ function stop {
 
     (ps -p $(< $RUN/nginx.pid) | grep nginx) &>/dev/null && fatal nginx still running
     (ps -p $(< $RUN/uwsgi.pid) | grep uwsgi) &>/dev/null && fatal uwsgi still running
-    #pgrep -F $RUN/nginx.pid nginx &>/dev/null && echo 'NGINX still running'
-    #pgrep -F $RUN/uwsgi.pid uwsgi &>/dev/null && echo 'UWSGI still running'
+    #pgrep -F $RUN/nginx.pid nginx &>/dev/null && echo nginx still running
+    #pgrep -F $RUN/uwsgi.pid uwsgi &>/dev/null && echo uwsgi still running
 }
 
 
