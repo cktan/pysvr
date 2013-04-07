@@ -1,3 +1,8 @@
+install pip and virtualenv
+$ curl -O https://raw.github.com/pypa/pip/master/contrib/get-pip.py
+$ sudo python get-pip.py
+$ sudo pip install virtualenv
+
 run these:
 
 sudo mkdir /var/{log,run,tmp}/pysvr
