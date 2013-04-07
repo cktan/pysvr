@@ -78,25 +78,15 @@ class DB:
 
 
 ### ------------------------------------------
-class DSN:
-    known = {}
-
-    @staticmethod
+def dsn(dbname, uname, host, port='5432'):
     def env(k, defval=''):
         r = os.environ.get(k, defval)
         if not r:
             raise ConfigError('env-var %s not set' % k)
         return r
 
-    @staticmethod
-    def make(dbname, uname, host, port='5432'):
-        ret = DSN.known.get((dbname, uname, host, port) )
-        if not ret:
-            p = DSN.env('PG_PASSWORD_%s_%s' % (dbname.upper(), uname.upper()))
-            ret = 'dbname=%s user=%s password=%s host=%s port=%s' % (dbname, uname, p, host, port)
-            DSN.known[ (dbname, uname, host, port) ] = ret
-        return ret
-
+    p = env('PG_PASSWORD_%s_%s' % (dbname.upper(), uname.upper()))
+    return 'dbname=%s user=%s password=%s host=%s port=%s' % (dbname, uname, p, host, port)
 
 
 ### ------------------------------------------
@@ -110,14 +100,14 @@ if __name__ == '__main__':
         if not sql:
             sys.exit('Error: cannot read sql from stdin')
 
-    dsn = DSN.make(dbname, uname, host, port)
+    d = dsn(dbname, uname, host, port)
 
-    with DB(dsn) as db:
+    with DB(d) as db:
         print db.query(sql, ())
-        with DB(dsn) as db:
+        with DB(d) as db:
             for i in db.query(sql, ()):
                 print i
 
-    with DB(dsn) as db:
+    with DB(d) as db:
         for i in db.query(sql, ()):
             print i
