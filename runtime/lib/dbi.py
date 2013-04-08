@@ -81,7 +81,7 @@ class DB:
         cur = self.__conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         try:
             cur.execute(sql, param)
-            out = cur.rowcount()
+            out = cur.rowcount
             ok = True
             return out
         finally:
@@ -98,7 +98,7 @@ class DB:
         try:
             for (sql, param) in sqlist:
                 cur.execute(sql, param)
-                out += [cur.rowcount()]
+                out += [cur.rowcount]
             ok = True
             return out
         finally:
