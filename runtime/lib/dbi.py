@@ -76,6 +76,39 @@ class DB:
             else:
                 self.__conn.rollback()
 
+    def modify(self, sql, param):
+        ok = False
+        cur = self.__conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        try:
+            cur.execute(sql, param)
+            out = cur.rowcount()
+            ok = True
+            return out
+        finally:
+            cur.close()
+            if ok:
+                self.__conn.commit()
+            else:
+                self.__conn.rollback()
+        
+    def multi_modify(self, sqlist):
+        ok = False
+        cur = self.__conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        out = []
+        try:
+            for (sql, param) in sqlist:
+                cur.execute(sql, param)
+                out += [cur.rowcount()]
+            ok = True
+            return out
+        finally:
+            cur.close()
+            if ok:
+                self.__conn.commit()
+            else:
+                self.__conn.rollback()
+        
+
 
 ### ------------------------------------------
 def dsn(dbname, uname, host, port='5432'):
