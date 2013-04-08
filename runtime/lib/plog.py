@@ -90,18 +90,28 @@ def run():
         return 'app-%04d%02d%02d.log' % (tm.tm_year, tm.tm_mon, tm.tm_mday)
 
     ftime = gmtime()
-    fp = open(mkfname(ftime), 'a+b')
+    fname = mkfname(ftime)
+    fp = open(fname, 'a+b')
     while 1:
         pkt, addr = sock.recvfrom(1024*8)
         if not pkt:
             break
-        t = gmtime()
-        if t.tm_mday != ftime.tm_mday:
+        now = gmtime()
+        if now.tm_mday != ftime.tm_mday:
+            oldfname = fname
             fp.close()
-            ftime = t
-            fp = open(mkfname(ftime), 'a+b')
+
+            # open new file
+            ftime = now
+            fname = mkfname(ftime)
+            fp = open(fname, 'a+b')
+
+            # gzip old file
+            os.system("nohup gzip '%s' &" % oldfname)
+            
         fp.write(pkt)
         fp.write('\n')
+        fp.flush()
 
 __init()
 if __name__ == '__main__':
@@ -109,8 +119,16 @@ if __name__ == '__main__':
         sys.exit('Usage: %s pidfile' % sys.argv[0])
 
     pidpath = sys.argv[1]
+
+    # go to background
     __daemonize()
+
+    # save our pid 
     with open(pidpath, 'w') as fp:
         fp.write('%d\n' % os.getpid())
-    __init()
+
+    # need to call init again because daemonize closed all FDs
+    __init()  
+
+    # run the loop
     run()

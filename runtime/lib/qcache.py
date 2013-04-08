@@ -81,6 +81,7 @@ class QCache:
 
         # cache miss. run query.
         with dbi.DB(self.__dsn) as db:
+            # note: this loop will only run once
             for r in db.query(sql, qkey):
                 r['_mc'] = 0
                 # put in cache

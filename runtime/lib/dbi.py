@@ -102,12 +102,15 @@ if __name__ == '__main__':
 
     d = dsn(dbname, uname, host, port)
 
+    # this will create one connection
     with DB(d) as db:
         print db.query(sql, ())
+        # this will create another connection
         with DB(d) as db:
             for i in db.query(sql, ()):
                 print i
 
+    # reuse one of the connections above
     with DB(d) as db:
         for i in db.query(sql, ()):
             print i
