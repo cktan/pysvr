@@ -13,6 +13,13 @@ function warning { echo '[WARNING]' $@; }
 [ $UID != 0 ] || fatal cannot run as root user
 [ -r $F ] && source $F || warning cannot read $F
 
+function check {
+    # check that the processes are running
+    (ps -p $(< $RUN/nginx.pid) | grep nginx) &>/dev/null || fatal nginx not running
+    (ps -p $(< $RUN/uwsgi.pid) | grep uwsgi) &>/dev/null || fatal uwsgi not running
+    (ps -p $(< $RUN/plog.pid) | grep plog) &>/dev/null || fatal plog not running
+}
+
 function start {
     [ -d $CUR ] || fatal missing dir $CUR - this is usually a symlink to the runtime dir.
     [ -d $ETC ] || fatal missing dir $ETC
@@ -23,15 +30,15 @@ function start {
 
     nginx -c $ETC/pysvr_nginx.conf 2>> $TMP/nginx_error.log || fatal nginx failed to start
     uwsgi --ini $ETC/pysvr_uwsgi.ini || fatal uwsgi failed to start
+    python $CUR/lib/plog.py $RUN/plog.pid || fatal plog failed to start
 
-    # check that the processes are running
-    (ps -p $(< $RUN/nginx.pid) | grep nginx) &>/dev/null || fatal nginx not running
-    (ps -p $(< $RUN/uwsgi.pid) | grep uwsgi) &>/dev/null || fatal uwsgi not running
+    check
 }
 
 function stop {
     (ps -p $(< $RUN/nginx.pid) | awk '/nginx/ {print $1}' | xargs kill -INT) &>/dev/null
     (ps -p $(< $RUN/uwsgi.pid) | awk '/uwsgi/ {print $1}' | xargs kill -INT) &>/dev/null
+    (ps -p $(< $RUN/plog.pid) | awk '/plog/ {print $1}' | xargs kill -INT) &>/dev/null
     #pkill -F $RUN/nginx.pid nginx &>/dev/null
     #pkill -9 -F $RUN/uwsgi.pid uwsgi &>/dev/null
 
@@ -39,6 +46,7 @@ function stop {
 
     (ps -p $(< $RUN/nginx.pid) | grep nginx) &>/dev/null && fatal nginx still running
     (ps -p $(< $RUN/uwsgi.pid) | grep uwsgi) &>/dev/null && fatal uwsgi still running
+    (ps -p $(< $RUN/plog.pid) | grep plog) &>/dev/null && fatal plog still running
     #pgrep -F $RUN/nginx.pid nginx &>/dev/null && echo nginx still running
     #pgrep -F $RUN/uwsgi.pid uwsgi &>/dev/null && echo uwsgi still running
 }
@@ -48,8 +56,7 @@ function reload {
     (ps -p $(< $RUN/nginx.pid) | awk '/nginx/ {print $1}' | xargs kill -HUP) &>/dev/null
     (ps -p $(< $RUN/uwsgi.pid) | awk '/uwsgi/ {print $1}' | xargs kill -HUP) &>/dev/null
     
-    (ps -p $(< $RUN/nginx.pid) | grep nginx) &>/dev/null || fatal nginx not running
-    (ps -p $(< $RUN/uwsgi.pid) | grep uwsgi) &>/dev/null || fatal uwsgi not running
+    check
 }
 
 

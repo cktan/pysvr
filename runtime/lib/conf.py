@@ -3,7 +3,7 @@ import os
 
 cfg = None
 
-def load():
+def __load():
     global cfg
     dir = os.path.dirname(os.path.abspath(__file__))
     path = os.path.join(dir, '..', 'etc', 'app.ini')
@@ -14,4 +14,4 @@ def get(section, option, val=''):
     r = cfg.get(section, option)
     return r and r or val
 
-load()
+__load()
