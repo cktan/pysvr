@@ -110,9 +110,7 @@ if __name__ == '__main__':
 
     pidpath = sys.argv[1]
     __daemonize()
-    fp = open(pidpath, 'w')
-    fp.write('%d\n' % os.getpid())
-    fp.close()
-    sys.stderr = open('/tmp/t', 'a')
+    with open(pidpath, 'w') as fp:
+        fp.write('%d\n' % os.getpid())
     __init()
     run()
