@@ -1,7 +1,14 @@
 #!/usr/bin/env python
-import json
+import sys, os, json
 import bottle
 from bottle import route, run, request, abort, default_app
+
+scriptdir = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.join(scriptdir, '..', 'lib'))
+print sys.path
+import conf, plog
+
+plog.info('started')
 
 @route('/documents', method='PUT')
 def new_document():
@@ -29,6 +36,7 @@ def list_document():
 @route('/documents/:id')
 def get_document(id):
     return 'GET DOCUMENT ' + id
+
 
 if __name__ == "__main__":
     run(host="localhost", port=8081)
