@@ -37,6 +37,11 @@ Next, in preparation for deployment via Capistrano on a separate dir structure, 
 
 Give it a Spin
 --------------
+If you are not in the virtual environment, activate it as follows:
+
+    cd /o/pysvr
+    source env/bin/activate
+
 To start:
 
     cd /o/pysvr/current
