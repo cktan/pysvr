@@ -15,9 +15,9 @@ function warning { echo '[WARNING]' $@; }
 
 function check {
     # check that the processes are running
-    (ps -p $(< $RUN/nginx.pid) | grep nginx) &>/dev/null || fatal nginx not running
-    (ps -p $(< $RUN/uwsgi.pid) | grep uwsgi) &>/dev/null || fatal uwsgi not running
-    (ps -p $(< $RUN/plog.pid) | grep plog) &>/dev/null || fatal plog not running
+    (ps -fp $(< $RUN/nginx.pid) | grep nginx) &>/dev/null || fatal nginx not running
+    (ps -fp $(< $RUN/uwsgi.pid) | grep uwsgi) &>/dev/null || fatal uwsgi not running
+    (ps -fp $(< $RUN/plog.pid) | grep plog) &>/dev/null || fatal plog not running
 }
 
 function start {
@@ -36,25 +36,25 @@ function start {
 }
 
 function stop {
-    (ps -p $(< $RUN/nginx.pid) | awk '/nginx/ {print $1}' | xargs kill -INT) &>/dev/null
-    (ps -p $(< $RUN/uwsgi.pid) | awk '/uwsgi/ {print $1}' | xargs kill -INT) &>/dev/null
-    (ps -p $(< $RUN/plog.pid) | awk '/plog/ {print $1}' | xargs kill -INT) &>/dev/null
+    (ps -fp $(< $RUN/nginx.pid) | awk '/nginx/ {print $2}' | xargs kill -INT) &>/dev/null
+    (ps -fp $(< $RUN/uwsgi.pid) | awk '/uwsgi/ {print $2}' | xargs kill -INT) &>/dev/null
+    (ps -fp $(< $RUN/plog.pid) | awk '/plog/ {print $2}' | xargs kill -INT) &>/dev/null
     #pkill -F $RUN/nginx.pid nginx &>/dev/null
     #pkill -9 -F $RUN/uwsgi.pid uwsgi &>/dev/null
 
     sleep 1
 
-    (ps -p $(< $RUN/nginx.pid) | grep nginx) &>/dev/null && fatal nginx still running
-    (ps -p $(< $RUN/uwsgi.pid) | grep uwsgi) &>/dev/null && fatal uwsgi still running
-    (ps -p $(< $RUN/plog.pid) | grep plog) &>/dev/null && fatal plog still running
+    (ps -fp $(< $RUN/nginx.pid) | grep nginx) &>/dev/null && fatal nginx still running
+    (ps -fp $(< $RUN/uwsgi.pid) | grep uwsgi) &>/dev/null && fatal uwsgi still running
+    (ps -fp $(< $RUN/plog.pid) | grep plog) &>/dev/null && fatal plog still running
     #pgrep -F $RUN/nginx.pid nginx &>/dev/null && echo nginx still running
     #pgrep -F $RUN/uwsgi.pid uwsgi &>/dev/null && echo uwsgi still running
 }
 
 
 function reload {
-    (ps -p $(< $RUN/nginx.pid) | awk '/nginx/ {print $1}' | xargs kill -HUP) &>/dev/null
-    (ps -p $(< $RUN/uwsgi.pid) | awk '/uwsgi/ {print $1}' | xargs kill -HUP) &>/dev/null
+    (ps -p $(< $RUN/nginx.pid) | awk '/nginx/ {print $2}' | xargs kill -HUP) &>/dev/null
+    (ps -p $(< $RUN/uwsgi.pid) | awk '/uwsgi/ {print $2}' | xargs kill -HUP) &>/dev/null
     
     check
 }

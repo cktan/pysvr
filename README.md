@@ -18,7 +18,7 @@ Set up virtualenv.
     virtualenv env
     source env/bin/activate
 
-Install Python Packages.
+Install python packages.
 
     pip install bottle psycopg2 boto statsd redis
     pip install http://projects.unbit.it/downloads/uwsgi-lts.tar.gz
@@ -30,7 +30,7 @@ The system stores log in /var/log/:appname/, pid files in /var/run/:appname/, an
     sudo mkdir /var/{log,run,tmp}/pysvr
     sudo chown $USER /var/{log,run,tmp}/pysvr
     
-Next, in preparation for deployment via Capistrano on a separate dir structure, we always link to the runtime dir via a symbolic link *current*.
+Next, in preparation for deployment via Capistrano on a separate directory structure, we always link to the runtime directory via a symbolic link: *current*.
 
     cd /o/pysvr
     ln -s runtime current
@@ -47,7 +47,7 @@ To start:
     cd /o/pysvr/current
     bash pysvr_ctl.sh restart
 
-Here is some simple tests:
+Here are some simple tests:
 
     curl http://localhost:8686/documents/
     curl http://localhost:8686/documents/20
@@ -57,6 +57,7 @@ Here is some simple tests:
     
 To look at the logs:
 
+    ls /var/log/pysvr
     tail -f /var/log/pysvr/app.log
     
 To see the processes:
