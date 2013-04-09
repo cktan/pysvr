@@ -3,6 +3,8 @@ PREEMBLE
     curl -O https://raw.github.com/pypa/pip/master/contrib/get-pip.py
     sudo python get-pip.py
     sudo pip install virtualenv
+
+GET THE CODE
     cd /o
     git clone https://github.com/cktan/pysvr.git
     cd /o/pysvr

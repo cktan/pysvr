@@ -97,7 +97,7 @@ def run():
         if not pkt:
             break
         now = gmtime()
-        if now.tm_mday != ftime.tm_mday:
+        if now.tm_mday != ftime.tm_mday or now.tm_mon != ftime.tm_mon:
             oldfname = fname
             fp.close()
 
@@ -106,7 +106,7 @@ def run():
             fname = mkfname(ftime)
             fp = open(fname, 'a+b')
 
-            # gzip old file
+            # gzip old file in the background
             os.system("nohup gzip '%s' &" % oldfname)
             
         fp.write(pkt)
