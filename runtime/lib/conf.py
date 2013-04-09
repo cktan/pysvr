@@ -12,6 +12,8 @@ def __load():
 
 def get(section, option, val=''):
     r = cfg.get(section, option)
-    return r and r or val
+    if r != None:
+	return r
+    return val
 
 __load()
