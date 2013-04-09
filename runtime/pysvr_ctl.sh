@@ -30,7 +30,7 @@ function start {
 
     nginx -c $ETC/pysvr_nginx.conf 2>> $TMP/nginx_error.log || fatal nginx failed to start
     uwsgi --ini $ETC/pysvr_uwsgi.ini || fatal uwsgi failed to start
-    python $CUR/lib/plog.py $RUN/plog.pid || fatal plog failed to start
+    python $CUR/lib/plog.py pysvr || fatal plog failed to start
 
     check
 }

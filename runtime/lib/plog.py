@@ -77,10 +77,10 @@ def __daemonize():
             pass
 
 
-def run():
+def run(appname):
     global sock, dstaddr
     sock.bind(dstaddr)
-    dstdir = conf.get('plog', 'dir')
+    dstdir = conf.get('plog', 'logdir')
     print 'plog udp server: listening to port', dstaddr[1]
     print 'plog udp server: writing to', dstdir
 
@@ -92,6 +92,12 @@ def run():
     ftime = gmtime()
     fname = mkfname(ftime)
     fp = open(fname, 'a+b')
+    fp.write('%04d/%02d/%02d %02d:%02d:%02d INFO  plog started; app=%s\n'
+             % (ftime.tm_year, ftime.tm_mon, ftime.tm_mday,
+                ftime.tm_hour, ftime.tm_min, ftime.tm_sec,
+                conf.get('app', 'name', 'UNKNOWN')))
+    fp.flush()
+    
     while 1:
         pkt, addr = sock.recvfrom(1024*8)
         if not pkt:
@@ -113,12 +119,12 @@ def run():
         fp.write('\n')
         fp.flush()
 
+
 __init()
 if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        sys.exit('Usage: %s pidfile' % sys.argv[0])
-
-    pidpath = sys.argv[1]
+    pidpath = conf.get('plog', 'pidpath', '')
+    if not pidpath:
+        sys.exit('Error: missing pidpath in app.ini')
 
     # go to background
     __daemonize()
@@ -131,4 +137,4 @@ if __name__ == '__main__':
     __init()  
 
     # run the loop
-    run()
+    run(len(sys.argv) > 1 and sys.argv[1] or '')
