@@ -49,12 +49,17 @@ To start:
 
 Here are some simple tests:
 
-    curl http://localhost:8686/dogs/
-    curl http://localhost:8686/dogs/Bo
-    curl -X POST http://localhost:8686/dogs -d '{"name": "Bo"}'
-    curl -X PUT http://localhost:8686/dogs/Bo -d '{"name": "Bo", "color": "tricolor"}'
-    curl -X DELETE http://localhost:8686/dogs/Bo 
-    
+    % curl http://localhost:8686/dogs/
+    LIST DOGS
+    % curl http://localhost:8686/dogs/Bo
+    SHOW DOG Bo
+    % curl -X POST http://localhost:8686/dogs -d '{"name": "Bo"}'
+    NEW DOG Bo
+    % curl -X PUT http://localhost:8686/dogs/Bo -d '{"name": "Bo", "color": "tricolor"}'
+    UPDATE DOG Bo
+    % curl -X DELETE http://localhost:8686/dogs/Bo 
+    DELETE DOG Bo
+
 To look at the logs:
 
     ls /var/log/pysvr
