@@ -53,8 +53,8 @@ function stop {
 
 
 function reload {
-    (ps -p $(< $RUN/nginx.pid) | awk '/nginx/ {print $2}' | xargs kill -HUP) &>/dev/null
-    (ps -p $(< $RUN/uwsgi.pid) | awk '/uwsgi/ {print $2}' | xargs kill -HUP) &>/dev/null
+    (ps -fp $(< $RUN/nginx.pid) | awk '/nginx/ {print $2}' | xargs kill -HUP) &>/dev/null
+    (ps -fp $(< $RUN/uwsgi.pid) | awk '/uwsgi/ {print $2}' | xargs kill -HUP) &>/dev/null
     
     check
 }

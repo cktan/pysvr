@@ -49,11 +49,11 @@ To start:
 
 Here are some simple tests:
 
-    curl http://localhost:8686/documents/
-    curl http://localhost:8686/documents/20
-    curl -X PUT http://localhost:8686/documents -d '{"_id": 123}'
-    curl -X POST http://localhost:8686/documents/20 -d '{"name": “john wayne”}'
-    curl -X DELETE http://localhost:8686/documents/20 
+    curl http://localhost:8686/dogs/
+    curl http://localhost:8686/dogs/Bo
+    curl -X POST http://localhost:8686/dogs -d '{"name": "Bo"}'
+    curl -X PUT http://localhost:8686/dogs/Bo -d '{"name": "Bo", "color": "tricolor"}'
+    curl -X DELETE http://localhost:8686/dogs/Bo 
     
 To look at the logs:
 
