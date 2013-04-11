@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2.7
 import sys, os, json
 import bottle
 from bottle import route, run, request, abort, default_app
