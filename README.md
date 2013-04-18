@@ -20,7 +20,7 @@ Set up virtualenv.
 
 Install python packages.
 
-    pip install bottle psycopg2 boto statsd redis
+    pip install bottle psycopg2 boto statsd redis pytest
     pip install http://projects.unbit.it/downloads/uwsgi-lts.tar.gz
 
 Prepare to Run
