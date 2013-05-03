@@ -5,7 +5,7 @@ Install pip and virtualenv.
 
     curl -O https://raw.github.com/pypa/pip/master/contrib/get-pip.py
     sudo python get-pip.py
-    sudo pip install virtualenv```
+    sudo pip install virtualenv
 
 Get the code.
 
@@ -20,7 +20,7 @@ Set up virtualenv.
 
 Install python packages.
 
-    pip install bottle psycopg2 boto statsd redis pytest
+    pip install bottle psycopg2 boto statsd redis pytest pycurl
     pip install http://projects.unbit.it/downloads/uwsgi-lts.tar.gz
 
 Prepare to Run
@@ -55,7 +55,7 @@ Here are some simple tests:
     SHOW DOG Bo
     % curl -X POST http://localhost:8686/dogs -d '{"name": "Bo"}'
     NEW DOG Bo
-    % curl -X PUT http://localhost:8686/dogs/Bo -d '{"name": "Bo", "color": "tricolor"}'
+    % curl -X PUT http://localhost:8686/dogs/Bo -d '{"color": "tricolor"}'
     UPDATE DOG Bo
     % curl -X DELETE http://localhost:8686/dogs/Bo 
     DELETE DOG Bo
