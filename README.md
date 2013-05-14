@@ -25,7 +25,7 @@ Install python packages.
 
 Prepare to Run
 --------------
-The system stores log in /var/log/:appname/, pid files in /var/run/:appname/, and temp files in /var/run/:appname/. We need to create these directories with write credentials.
+The system stores {log,pid,tmp} files in /var/{log,run,tmp}/:appname/ respectively. We need to create these directories with write credentials.
 
     sudo mkdir /var/{log,run,tmp}/pysvr
     sudo chown $USER /var/{log,run,tmp}/pysvr
