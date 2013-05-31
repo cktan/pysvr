@@ -1,4 +1,8 @@
-F=/o/dataservice-config/current/my.env
+# export PATH="...:$PATH";
+source ../env/bin/activate
+
+[ $UID != 0 ] || fatal cannot run as root user
+
 CUR=/o/pysvr/current
 ETC=$CUR/etc
 TMP=/var/tmp/pysvr
@@ -9,8 +13,7 @@ function fatal { echo '[FATAL]' $@; exit 1;}
 
 function warning { echo '[WARNING]' $@; }
 
-
-[ $UID != 0 ] || fatal cannot run as root user
+F=/o/dataservice-config/current/my.env
 [ -r $F ] && source $F || warning cannot read $F
 
 function check {
@@ -61,7 +64,8 @@ function reload {
 
 
 case "$1" in 
-    start) 
+    start)      
+	stop
 	start
 	;;
     stop)
@@ -70,12 +74,8 @@ case "$1" in
     reload)
 	reload
 	;;
-    restart)
-	stop
-	start
-	;;
     *)
-	echo "Usage: $0 {start|stop|restart|reload}"
+	echo "Usage: $0 {start|stop|reload}"
 	exit 1
 esac
 
